@@ -25,8 +25,38 @@ ducks
 ```{r}
 ducks 
 ```
+```{r}
+
+```
+
 #graphs of eggs in which type of nest, which species more in thier own nest vs mixed nest
+
+```{r}
+ducks %>%
+  mutate(host= ifelse(host == 1, "Wood Duck", "Hooded Merganser")) %>% 
+  select(host,nest) %>% 
+  group_by(nest, host) %>% 
+  summarise(count_nest= n()) %>% 
+  ggplot(aes(x=nest, y=count_nest, fill = host))+
+  geom_col(position = "stack")+
+  labs(title = "Number of Eggs of Each Species in Nesting Types", fill = "Duck Species", x= "Nesting Types",
+       y="Count")
+```
+
 #Graph of egg survival of 2 species
+
+```{r}
+ducks %>% 
+  mutate(host= ifelse(host == 1, "Wood Duck", "Hooded Merganser")) %>%
+  select(host, nestfate) %>% 
+  group_by(nestfate, host) %>% 
+  summarise(count_fate= n()) %>% 
+  ggplot(aes(x=host, y=count_fate, fill = nestfate))+
+  geom_col(position = "dodge")+
+  labs(title = "Number of Failed vs Hatched Eggs in Each Species", fill = "Fate", x= "Species", y="Number of Eggs")
+```
+
+
 #graph of egg survival btw 2 states (shinyapp, select which state)
 #avg hatch size of each species
 #avg hatch size of each species vs survivability of each species (shiny app)
