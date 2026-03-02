@@ -16,26 +16,17 @@ library(tibble)
 library(janitor)
 ```
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
 ```{r}
-ducks<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/data/doi_10_5061_dryad_0k6djhb8q__v20240808/cleanData6.6.24.csv") %>% 
+ducks<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/data/doi_10_5061_dryad_0k6djhb8q__v20240808/cleanData6.6.24.csv") %>% 
   clean_names()
 ducks
 ```
+
 ```{r}
 ducks 
-
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+#graphs of eggs in which type of nest, which species more in thier own nest vs mixed nest
+#Graph of egg survival of 2 species
+#graph of egg survival btw 2 states (shinyapp, select which state)
+#avg hatch size of each species
+#avg hatch size of each species vs survivability of each species (shiny app)
