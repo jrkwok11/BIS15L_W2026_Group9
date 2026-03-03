@@ -14,20 +14,20 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(tibble)
 library(janitor)
+library(naniar)
+library(dplyr)
 ```
 
 ```{r}
-ducks<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/data/doi_10_5061_dryad_0k6djhb8q__v20240808/cleanData6.6.24.csv") %>% 
+ducks<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/data/doi_10_5061_dryad_0k6djhb8q__v20240808/cleanData6.6.24.csv", na="unknown") %>% 
   clean_names()
 ducks
 ```
 
 ```{r}
-ducks 
+summary(ducks)
 ```
-```{r}
 
-```
 
 #graphs of eggs in which type of nest, which species more in thier own nest vs mixed nest
 
@@ -38,7 +38,7 @@ ducks %>%
   group_by(nest, host) %>% 
   summarise(count_nest= n()) %>% 
   ggplot(aes(x=nest, y=count_nest, fill = host))+
-  geom_col(position = "stack")+
+  geom_col(position = "dodge")+
   labs(title = "Number of Eggs of Each Species in Nesting Types", fill = "Duck Species", x= "Nesting Types",
        y="Count")
 ```
@@ -57,6 +57,65 @@ ducks %>%
 ```
 
 
-#graph of egg survival btw 2 states (shinyapp, select which state)
+#graph of egg survival btw 2 states (shinyapp, select which state) 
+
+```{r}
+
+```
+
 #avg hatch size of each species
+```{r}
+ducks %>% 
+  mutate(host= ifelse(host == 1, "Wood Duck", "Hooded Merganser")) %>%
+  select(hatch, host, id) %>% 
+  mutate(hatch= as.numeric(hatch)) %>% 
+   group_by(host) %>%
+  summarise(avg_hatchsize=mean(hatch))
+  
+  
+  
+
+   
+```
+
 #avg hatch size of each species vs survivability of each species (shiny app)
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  selectInput("x",
+              choices = c("nestfate")),
+  selectInput("y",
+              choices = c(""))
+)
+
+server <- function(input, output, session) {
+  
+}
+
+shinyApp(ui, server)
+```
+#clutch and hatch
+
+
+```{r}
+ducks %>% 
+   mutate(host= ifelse(host == 1, "Wood Duck", "Hooded Merganser")) %>%
+  select(host, id, clutch, hatch) %>% 
+  filter(host== "Wood Duck") %>% 
+   mutate(hatch= as.numeric(hatch),
+          clutch= as.numeric(clutch)) %>%
+group_by(id) %>% 
+  summarize(clutch_hatched= clutch-hatch) %>% 
+  ggplot(aes(x= id, y=clutch_hatched))+
+  geom_point()
+```
+```{r}
+```
+
+
+```{r}
+?.group
+```
+
