@@ -1,0 +1,33 @@
+---
+title: "Gapminder"
+output: html_document
+date: "2026-03-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#Libraries
+```{r}
+library(tidyverse)
+library(tibble)
+library(janitor)
+library(naniar)
+library(dplyr)
+```
+
+#Data set and cleaning
+
+```{r}
+gapminder_life_expectancy<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder Data/Gapminder_data.csv") 
+gapminder_life_expectancy
+```
+```{r}
+gapminder_life_expectancy %>% 
+  pivot_longer(-c(name,geo),
+               names_to = "year",
+               values_to = "life_expectancy")
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
