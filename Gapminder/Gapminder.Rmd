@@ -19,14 +19,96 @@ library(dplyr)
 #Data set and cleaning
 
 ```{r}
-gapminder_life_expectancy<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder Data/Gapminder_data.csv") 
-gapminder_life_expectancy
+gapminder_life_expectancy<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Gapminder_data.csv") 
+```
+
+```{r}
+co2_emissions<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/co2_pcap_cons.csv")
+```
+
+```{r}
+Pop<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/pop.csv")
+```
+
+```{r}
+child_per_woman<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/children_per_woman_total_fertility.csv")
 ```
 ```{r}
-gapminder_life_expectancy %>% 
+Child_mortalityG<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Childs_mortality.csv")
+Child_mortalityG #per 1000 births
+```
+
+#pivoting and fixing year + other problems
+
+```{r}
+gapminder_life_expectancy<- gapminder_life_expectancy %>% 
   pivot_longer(-c(name,geo),
                names_to = "year",
-               values_to = "life_expectancy")
+               values_to = "life_expectancy") %>% 
+  mutate(year= str_remove(year, "X"))
+```
+
+```{r}
+Child_mortalityG<-Child_mortalityG %>% 
+pivot_longer(-c(name,geo),
+               names_to = "year",
+               values_to = "cild_mortality") %>% 
+  mutate(year= str_remove(year, "X")) 
+```
+
+```{r}
+co2_emissions<- co2_emissions %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+              values_to = "Co2_emissions")
+```
+
+```{r}
+pop<- Pop %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+              values_to = "population")
+```
+
+```{r}
+child_per_woman<- child_per_woman %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+               values_to = "child_per_woman")
+```
+
+#joining data tables
+
+```{r}
+gp<-full_join(Child_mortalityG, gapminder_life_expectancy, by= c("name", "geo","year"))
+```
+
+```{r}
+gp2<-full_join(gp, co2_emissions, by= c("name", "geo","year"))
+```
+
+```{r}
+gp3<-full_join(gp2,pop, by= c("name", "geo","year"))
+```
+
+```{r}
+gapminder<-full_join(gp3,child_per_woman )
+```
+
+```{r}
+gapminder<- gapminder %>% 
+  filter(year>= "1915", year<="2025")
+```
+
+
+#final data set
+
+```{r}
+gapminder
+```
+
+```{r}
+write.csv(gapminder, file="gapminder.csv", row.names=FALSE)
 ```
 
 
