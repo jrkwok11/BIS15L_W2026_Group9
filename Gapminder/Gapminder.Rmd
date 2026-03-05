@@ -121,16 +121,20 @@ gapminder
 
 #understanding the data
 
+average co2_emissions from 2019-2025?
 ```{r}
-
+gapminder %>% 
+  select(name, Co2_emissions, year) %>% 
+  pivot_wider(names_from = "year",
+              values_from= "Co2_emissions" ) %>% 
+  
 ```
 
 
 #graphs
 
 ```{r}
-gapminder %>% 
-  
+
 ```
 
 
