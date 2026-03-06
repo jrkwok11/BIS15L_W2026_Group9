@@ -1,0 +1,91 @@
+---
+title: "Shiny app"
+output: html_document
+date: "2026-03-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(tibble)
+library(janitor)
+library(naniar)
+library(dplyr)
+library(shiny)
+library(shinydashboard)
+library(shinythemes)
+```
+```{r}
+gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
+gapminder
+```
+```{r}
+
+```
+
+
+
+```{r}
+ui <- fluidPage(
+  
+  theme=shinythemes::shinytheme("united"),
+  
+  selectInput("filter",
+              "select country",
+             choices = c("USA",
+         "Afghanistan",
+         "Albania",
+         "Angola",
+         "Australia",
+         "Belgium",
+         "Bangladesh",
+         "bulgaria",
+  selected = "USA")),
+  
+  selectInput("y",
+              "Select Year Variable",
+              choices = c("life_expectancy",
+                          "Co2_emissions",
+                          "population"),
+              selected = "population"),
+  
+  plotOutput("plot", width="600px", height= "6000px")
+  
+)
+
+server <- function(input, output, session) {
+  
+  output$plot <- renderPlot({
+    
+  gapminder %>% 
+      filter(name==".data[[input$filter]]") %>% 
+  ggplot(aes(x=year, y=.data[[input$y]]))+
+  geom_line(aes(color= "tomato"))+
+  geom_point(na.rm=T, shape=1, color= "blue")+
+  scale_x_continuous()+
+  theme(axis.text.x = element_text(angle=60, hjust=1))+
+  labs(title="countries throughout the years",
+       x="Year")+
+      theme_minimal()
+  })
+}
+
+shinyApp(ui, server)
+```
+
+```{r}
+ gapminder %>% 
+ filter((year>=2000 & year<=2025) & name=="USA") %>% 
+  ggplot(aes(x=year, y=population))+
+  geom_line()+
+  geom_point(shape=5)+
+  scale_x_continuous()+
+  theme(axis.text.x = element_text(angle=60, hjust=1))+
+  labs(title="GDP per Capita in the USA, 2000-2025",
+       x="Year",)
+      theme_minimal()
+```
+

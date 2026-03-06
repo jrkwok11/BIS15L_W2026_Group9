@@ -124,10 +124,17 @@ gapminder
 average co2_emissions from 2019-2025?
 ```{r}
 gapminder %>% 
-  select(name, Co2_emissions, year) %>% 
+  select(names, Co2_emissions, year) %>% 
   pivot_wider(names_from = "year",
               values_from= "Co2_emissions" ) %>% 
   
+```
+
+```{r}
+gapminder %>% 
+  select(name, Co2_emissions, year) %>% 
+  pivot_wider(names_from = "name",
+              values_from = "Co2_emissions")
 ```
 
 
@@ -139,65 +146,6 @@ gapminder %>%
 
 
 
-
-#shiny app
-```{r}
-#ask about making every 25 years a variable to select through?
-```
-
-```{r, eval=F, echo=T}
-ui <- fluidPage(
-  
-  theme=shinythemes::shinytheme("cyborg"),
-  
-  # selectInput("x",
-          #    "Select year range (25 years)",
-          #    choices = c(),
-  
-  selectInput("y",
-              "Select Year Variable",
-              choices = c("life_expectancy",
-                          "Co2_emissions",
-                          "population",
-                          "child_mortality"),
-              selected = "population"),
-  
-  plotOutput("plot", width="800px", height= "750px")
-  
-)
-
-server <- function(input, output, session) {
-  
-  output$plot <- renderPlot({
-    
-  gapminder %>% 
-  ggplot(aes(x=year, y=input$y))+
-  geom_line()+
-  geom_point(na.rm=T, shape=5)+
-  scale_x_continuous()+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(title="USA throughout the year",
-       x="Year",
-       y="n")
-      theme_minimal()
-  })
-}
-
-shinyApp(ui, server)
-```
-
-```{r}
- gapminder %>% 
- filter((year>=2000 & year<=2025) & name=="USA") %>% 
-  ggplot(aes(x=year, y=population))+
-  geom_line()+
-  geom_point(shape=5)+
-  scale_x_continuous()+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(title="GDP per Capita in the USA, 2000-2025",
-       x="Year",)
-      theme_minimal()
-```
 
 
 
