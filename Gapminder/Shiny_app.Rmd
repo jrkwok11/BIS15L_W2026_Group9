@@ -30,8 +30,14 @@ gapminder
 
 ```{r}
 ui <- fluidPage(
+    theme=shinythemes::shinytheme("united"),
+  dashboardPage(
+    
   
-  theme=shinythemes::shinytheme("united"),
+  dashboardHeader(title = "Countries Throughout The Years"),
+ 
+  dashboardSidebar(title = "Variables",
+  
   
   selectInput("filter",
               "select country",
@@ -43,32 +49,62 @@ ui <- fluidPage(
          "Belgium",
          "Bangladesh",
          "bulgaria",
-  selected = "USA")),
+        "Brazil", 
+        "Canada",
+        "Chile",
+        "China",
+        "Colombia",
+        "Costa Rica",
+        "Cuba",
+       "Dominican Republic",
+       "Equador",
+       "fiji",
+       "France",
+       "Finland",
+        "Germany",
+       "India",
+       "Indonesia",
+       "Ireland",
+       "Iran", 
+       "Iraq",
+       "Italy",
+       "Jordan",
+       "Japan",
+       "North Korea",
+       "Peru",
+       "Paraguay",
+       "Switzerland",
+       "Spain", 
+       "UK"),
+ selected = "USA"),
   
   selectInput("y",
               "Select Year Variable",
               choices = c("life_expectancy",
                           "Co2_emissions",
                           "population"),
-              selected = "population"),
+           selected = "population")), 
+    dashboardBody(
+   
+  plotOutput("plot", width="900px", height= "800px"))
   
-  plotOutput("plot", width="600px", height= "6000px")
-  
-)
+))
 
 server <- function(input, output, session) {
   
   output$plot <- renderPlot({
     
   gapminder %>% 
-      filter(name==".data[[input$filter]]") %>% 
-  ggplot(aes(x=year, y=.data[[input$y]]))+
+      filter(name== input$filter) %>% 
+  ggplot(aes(x=year, y=.data[[input$y]], na.rm=T))+
+scale_y_log10()+
   geom_line(aes(color= "tomato"))+
   geom_point(na.rm=T, shape=1, color= "blue")+
   scale_x_continuous()+
   theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(title="countries throughout the years",
-       x="Year")+
+  labs(,
+       x="Year",
+       legend=NULL)+
       theme_minimal()
   })
 }
