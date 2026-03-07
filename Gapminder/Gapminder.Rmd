@@ -34,12 +34,28 @@ Pop<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Dat
 ```
 
 ```{r}
-child_per_woman<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/children_per_woman_total_fertility.csv")
+Hiv_death<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/hiv_death.csv")
 ```
 ```{r}
-Child_mortalityG<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Childs_mortality.csv")
-Child_mortalityG #per 1000 births
+Child_death<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/number_of_child_deaths.csv")
+
 ```
+
+```{r}
+kcals_per_day<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/kilocalories_per_person_and_day.csv")
+```
+
+```{r}
+gdp<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/gdp.csv")
+```
+```{r}
+lung_cancerF<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_f.csv")
+```
+
+```{r}
+lung_cancerM<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_m.csv")
+```
+
 
 #pivoting and fixing year + other problems
 
@@ -52,10 +68,10 @@ gapminder_life_expectancy<- gapminder_life_expectancy %>%
 ```
 
 ```{r}
-Child_mortalityG<-Child_mortalityG %>% 
+Child_death<-Child_death %>% 
 pivot_longer(-c(name,geo),
                names_to = "year",
-               values_to = "cild_mortality") %>% 
+               values_to = "cild_death") %>% 
   mutate(year= str_remove(year, "X")) 
 ```
 
@@ -74,16 +90,44 @@ pop<- Pop %>%
 ```
 
 ```{r}
-child_per_woman<- child_per_woman %>% 
+hiv_death<- Hiv_death %>% 
   pivot_longer(-c(geo,name),
                names_to = "year",
-               values_to = "child_per_woman")
+               values_to = "hiv_deaths")
+```
+
+```{r}
+kcals_per_day<- kcals_per_day %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+               values_to = "kcal")
+```
+
+```{r}
+gdp<- gdp %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+               values_to = "gdp")
+```
+
+```{r}
+ lung_cancerF<-lung_cancerF %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+               values_to = "lung_cancerf")
+```
+  
+```{r}
+ lung_cancerM<-lung_cancerM %>% 
+  pivot_longer(-c(geo,name),
+               names_to = "year",
+               values_to = "lung_cancerm")
 ```
 
 #joining data tables
 
 ```{r}
-gp<-full_join(Child_mortalityG, gapminder_life_expectancy, by= c("name", "geo","year"))
+gp<-full_join(Child_death, gapminder_life_expectancy, by= c("name", "geo","year"))
 ```
 
 ```{r}
@@ -95,8 +139,25 @@ gp3<-full_join(gp2,pop, by= c("name", "geo","year"))
 ```
 
 ```{r}
-gapminder<-full_join(gp3,child_per_woman )
+gp4<-full_join(gp3,hiv_death, by= c("name", "geo", "year") )
 ```
+
+```{r}
+gp5<- full_join(gp4, kcals_per_day, by = c("name","geo","year"))
+```
+
+```{r}
+gp6<- full_join(gp5, gdp, by = c("name", "year","geo") )
+```
+
+```{r}
+gp7<- full_join(gp6,lung_cancerF, by = c("name", "year","geo") )
+```
+
+```{r}
+gapminder<- full_join(gp7,lung_cancerM, by = c("name", "year","geo") )
+```
+
 
 ```{r}
 gapminder<- gapminder %>% 
@@ -120,6 +181,14 @@ gapminder
 ```
 
 #understanding the data
+```{r}
+gg_miss_var(gapminder)
+```
+
+```{r}
+gapminder %>% 
+  miss_var_summary(order=T)
+```
 
 average co2_emissions from 2019-2025?
 ```{r}

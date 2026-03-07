@@ -41,41 +41,8 @@ ui <- fluidPage(
   
   selectInput("filter",
               "select country",
-             choices = c("USA",
-         "Afghanistan",
-         "Albania",
-         "Angola",
-         "Australia",
-         "Belgium",
-         "Bangladesh",
-         "bulgaria",
-        "Brazil", 
-        "Canada",
-        "Chile",
-        "China",
-        "Colombia",
-        "Costa Rica",
-        "Cuba",
-       "Dominican Republic",
-       "Equador",
-       "fiji",
-       "France",
-       "Finland",
-        "Germany",
-       "India",
-       "Indonesia",
-       "Ireland",
-       "Iran", 
-       "Iraq",
-       "Italy",
-       "Jordan",
-       "Japan",
-       "North Korea",
-       "Peru",
-       "Paraguay",
-       "Switzerland",
-       "Spain", 
-       "UK"),
+             choices = unique(gapminder$name),
+    
  selected = "USA"),
   
   selectInput("y",
@@ -98,13 +65,24 @@ server <- function(input, output, session) {
       filter(name== input$filter) %>% 
   ggplot(aes(x=year, y=.data[[input$y]], na.rm=T))+
 scale_y_log10()+
-  geom_line(aes(color= "tomato"))+
+  geom_line(aes(color= "aquamarine"))+
   geom_point(na.rm=T, shape=1, color= "blue")+
   scale_x_continuous()+
   theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(,
+  labs(
        x="Year",
        legend=NULL)+
+      theme_minimal()
+    
+    gapminder %>% 
+ filter(name=="USA") %>% 
+  ggplot(aes(x=year, y=.data[[input$y]]))+
+  geom_line()+
+  geom_point(shape=1)+
+  scale_x_continuous()+
+  theme(axis.text.x = element_text(angle=60, hjust=1))+
+  labs(title=,
+       x="")
       theme_minimal()
   })
 }
