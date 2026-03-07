@@ -1,6 +1,6 @@
 # BIS15L_W2026_Group9
 Names: Joanna Kwok, Mia Lastres
-- subject matter: global trends, their signifigance and data
+- Subject Matter: comparing global trends of different countries, their signifigance and data
 gapminder
 ___
 - Population =  Total population counts the number of inhabitants in the territory 
