@@ -22,19 +22,20 @@ library(shinythemes)
 gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
 gapminder
 ```
-```{r}
-
-```
 
 
 
 ```{r}
+library(bslib)
+theme<-bs_theme(bootswatch = "journal")
+
 ui <- fluidPage(
-    theme=shinythemes::shinytheme("united"),
-  dashboardPage(
+titlePanel(  "Countries Throughout The Years"),
     
+  dashboardPage( 
   
-  dashboardHeader(title = "Countries Throughout The Years"),
+  
+  dashboardHeader( ),
  
   dashboardSidebar(title = "Variables",
   
@@ -43,63 +44,54 @@ ui <- fluidPage(
               "select country",
              choices = unique(gapminder$name),
     
- selected = "USA"),
+ selected = "afghanistan"),
   
   selectInput("y",
-              "Select Year Variable",
+              "Select Variable",
               choices = c("life_expectancy",
                           "Co2_emissions",
-                          "population"),
+                          "population",
+                          "gdp"),
            selected = "population")), 
     dashboardBody(
    
-  plotOutput("plot", width="900px", height= "800px"))
+splitLayout( 
+   plotOutput("plot1", width= "900px", height= "800px"),
+ plotOutput("plot2", width = "900px", height = "800px"))
   
-))
+)))
 
 server <- function(input, output, session) {
   
-  output$plot <- renderPlot({
+  output$plot1 <- renderPlot({
     
   gapminder %>% 
       filter(name== input$filter) %>% 
   ggplot(aes(x=year, y=.data[[input$y]], na.rm=T))+
 scale_y_log10()+
-  geom_line(aes(color= "aquamarine"))+
+  geom_line(aes(color= "yellow"))+
   geom_point(na.rm=T, shape=1, color= "blue")+
   scale_x_continuous()+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(
-       x="Year",
-       legend=NULL)+
-      theme_minimal()
-    
+  theme(legend.position = "none", axis.text.x = element_text(hjust=1, size = 25), axis.text.y = element_text(hjust = 1, size = 20))+
+  labs( x="Year")
+    })
+  
+    output$plot2<-renderPlot({
     gapminder %>% 
  filter(name=="USA") %>% 
   ggplot(aes(x=year, y=.data[[input$y]]))+
-  geom_line()+
-  geom_point(shape=1)+
+  geom_line(aes(color="tomato"))+
+  geom_point(shape=1, na.rm=T, color="blue")+
+    scale_y_log10()+
   scale_x_continuous()+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(title=,
-       x="")
-      theme_minimal()
+  theme(axis.text.x = element_text( hjust=1, size=25), axis.text.y = element_text (hjust=1, size=20), legend.position= "none")+
+  labs(title="USA throughout years",
+       x="Years")
+      
   })
 }
 
 shinyApp(ui, server)
 ```
 
-```{r}
- gapminder %>% 
- filter((year>=2000 & year<=2025) & name=="USA") %>% 
-  ggplot(aes(x=year, y=population))+
-  geom_line()+
-  geom_point(shape=5)+
-  scale_x_continuous()+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  labs(title="GDP per Capita in the USA, 2000-2025",
-       x="Year",)
-      theme_minimal()
-```
 
