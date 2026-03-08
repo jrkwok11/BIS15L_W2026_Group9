@@ -312,7 +312,8 @@ gapminder %>%
   scale_x_log10()+
     geom_smooth(method = lm, rm=T, legend= NULL)+
   labs(title = "GDP vs Child death",
-       x= "GDP", Y= "Reported Child Deaths")+
+       x= "GDP", 
+       y= "Reported Child Deaths")+
   theme(legend.position= "none")
  
 ```
@@ -349,7 +350,7 @@ popgraph %>%
     theme(axis.text.x= element_text(angle = 45))+
   labs(title = "Population of the top 5 and bottom 5 GDP countries",
        x="Country",
-       Y="Population",
+       y="Population",
        fill= "Country")
 ```
 ```{r}
