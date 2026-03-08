@@ -20,7 +20,7 @@ library(shinythemes)
 ```
 ```{r}
 gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
-gapminder
+#gapminder
 ```
 
 
@@ -72,7 +72,9 @@ scale_y_log10()+
   geom_line(aes(color= "yellow"))+
   geom_point(na.rm=T, shape=1, color= "blue")+
   scale_x_continuous()+
-  theme(legend.position = "none", axis.text.x = element_text(hjust=1, size = 25), axis.text.y = element_text(hjust = 1, size = 20))+
+  theme(legend.position = "none",
+        axis.text.x = element_text(hjust=1, size = 25),
+        axis.text.y = element_text(hjust = 1, size = 20))+
   labs( x="Year")
     })
   
@@ -84,7 +86,9 @@ scale_y_log10()+
   geom_point(shape=1, na.rm=T, color="blue")+
     scale_y_log10()+
   scale_x_continuous()+
-  theme(axis.text.x = element_text( hjust=1, size=25), axis.text.y = element_text (hjust=1, size=20), legend.position= "none")+
+  theme(axis.text.x = element_text( hjust=1, size=25),
+        axis.text.y = element_text (hjust=1, size=20), 
+        legend.position= "none")+
   labs(title="USA throughout years",
        x="Years")
       

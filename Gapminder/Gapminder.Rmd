@@ -161,7 +161,7 @@ gapminder<- full_join(gp7,lung_cancerM, by = c("name", "year","geo") )
 
 ```{r}
 gapminder<- gapminder %>% 
-  filter(year>= "1915", year<="2025")
+  filter(year>= "1915", year<="2022")
 ```
 
 
@@ -190,14 +190,6 @@ gapminder %>%
   miss_var_summary(order=T)
 ```
 
-average co2_emissions from 2019-2025?
-```{r}
-gapminder %>% 
-  select(names, Co2_emissions, year) %>% 
-  pivot_wider(names_from = "year",
-              values_from= "Co2_emissions" ) %>% 
-  
-```
 
 ```{r}
 gapminder %>% 
@@ -208,12 +200,115 @@ gapminder %>%
 
 
 #graphs
-
+top 3 highest co2 emissions per capita
 ```{r}
+gapminder %>% 
+  filter(year>= "1980", year<="2022") %>% 
+  group_by(name) %>% 
+  summarize(avgco2=mean(Co2_emissions)) %>% 
+  arrange(desc(avgco2)) %>% 
+  slice_head(n=3)
+  
+```
+bottom 3 lowest co2 emissions
+```{r}
+gapminder %>% 
+  filter(name != c("Holy See", "Monaco", "San Marino"), year>= "1980", year<="2022") %>% 
+  group_by(name) %>% 
+  summarize(avgco2=mean(Co2_emissions, rm.na=T)) %>% 
+  arrange(desc(avgco2)) %>% 
+slice_tail(n=6)
 
 ```
 
+6 coutnries and the lung cancer deaths
 
+```{r}
+gapminder %>% 
+   filter(name ==c("Chad", "Congo, Dem. Rep.", "Burundi"), year>= "1980", year<="2022") %>% 
+  group_by(name) %>% 
+  summarize(mlungavg= mean(lung_cancerm), flungavg=mean(lung_cancerf)) %>% 
+  ggplot(aes(x=name, y= ))
+ 
+```
+
+highest year of co2
+```{r}
+gapminder %>%
+  select(name, year, Co2_emissions) %>% 
+  filter(year >= "1980", year<="2022") %>% 
+pivot_wider(names_from = "year",
+            values_from = Co2_emissions) 
+  
+```
+
+```{r}
+gapminder<- gapminder %>% 
+  mutate(lungcancertot=lung_cancerf+lung_cancerm)
+```
+
+co2 emissions between the 3 largest states in 2000
+
+```{r}
+gapminder %>%
+  select(name, year, Co2_emissions, lung_cancerf, lung_cancerm) %>% 
+  filter(name== "Qatar"|
+         name == "Singapore"|
+         name == "USA"|
+           name== "Chad"|
+           name== "Burundi"|
+           name== "Congo, Dem. Rep."|
+         name=="UAE",
+         year== "2000") %>% 
+   ggplot(aes(x=name, y=Co2_emissions, fill = name ))+
+  geom_col()+
+  scale_y_log10()+
+  labs(title = "Co2 Emissions in the year 2000",
+       x="Country",
+       y= "Co2 Emissions(per capita)")
+    
+```
+
+
+
+```{r}
+gapminder %>%
+  select(name, year, Co2_emissions, lungcancertot, lung_cancerf, lung_cancerm) %>% 
+  filter(name== "Qatar"|
+         name == "Singapore"|
+         name == "USA"|
+           name== "Chad"|
+           name== "Burundi"|
+         name=="UAE",
+         year =="2000") %>%  #qatar, singapore, usa, chad, burundi
+   pivot_longer(cols = c(lung_cancerf, lung_cancerm),
+               names_to = "sex",
+               values_to = "deaths")  %>% 
+  ggplot(aes(x=name, y= deaths, fill = sex ))+
+  geom_col(position= "dodge")+
+  scale_y_log10()+
+  labs(title = "Lung cancer deaths by sex in the year 2000",
+       x="Country",
+       y= "Deaths",
+       fill= "Sex")
+  
+
+```
+```{r}
+gapminder
+```
+
+```{r}
+gapminder %>% 
+  filter(year== "2022") %>% 
+  ggplot(aes(x= gdp, y= cild_death ))+
+    geom_point()+
+  scale_y_log10()+
+  scale_x_log10()+
+    geom_smooth(method = lm, rm=T)+
+  labs()
+ 
+```
 
 
 
