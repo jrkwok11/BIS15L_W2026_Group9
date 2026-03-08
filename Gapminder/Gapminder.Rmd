@@ -349,7 +349,8 @@ popgraph %>%
     theme(axis.text.x= element_text(angle = 45))+
   labs(title = "Population of the top 5 and bottom 5 GDP countries",
        x="Country",
-       Y="Population")
+       Y="Population",
+       fill= "Country")
 ```
 ```{r}
 popgraph %>% 
@@ -358,7 +359,8 @@ popgraph %>%
   theme(axis.text.x= element_text(angle = 45))+
   labs(title = "Countries with the lowest and highest GDP",
        x="Country", 
-       y= "GDP")
+       y= "GDP",
+       fill= "Country")
 ```
 
 
