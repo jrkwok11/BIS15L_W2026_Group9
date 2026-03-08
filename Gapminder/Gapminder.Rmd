@@ -299,18 +299,67 @@ gapminder
 ```
 
 ```{r}
-gapminder %>% 
-  filter(year== "2022") %>% 
-  ggplot(aes(x= gdp, y= cild_death ))+
-    geom_point()+
-  scale_y_log10()+
-  scale_x_log10()+
-    geom_smooth(method = lm, rm=T)+
-  labs()
- 
+
 ```
 
 
+```{r}
+gapminder %>% 
+  filter(year== "2022") %>% 
+  ggplot(aes(x= gdp, y= cild_death ))+
+    geom_point(aes(colour= name))+
+  scale_y_log10()+
+  scale_x_log10()+
+    geom_smooth(method = lm, rm=T, legend= NULL)+
+  labs(title = "GDP vs Child death",
+       x= "GDP", Y= "Reported Child Deaths")+
+  theme(legend.position= "none")
+ 
+```
+
+```{r}
+popgraph1<-gapminder %>% 
+  select(year, name, gdp, population) %>% 
+  filter(name!= "Monaco",
+         year== "2022") %>% 
+  arrange(desc(gdp)) %>% 
+  slice_head(n=5)
+  
+```
+
+```{r}
+popgraph2<-gapminder %>% 
+  select(year, name, gdp, population) %>% 
+  filter(name!= "Monaco"&
+         name!= "Liechtenstein"&
+         name!= "Holy See",
+         year== "2022") %>% 
+  arrange(desc(gdp)) %>% 
+  slice_tail(n=5)
+```
+
+```{r}
+popgraph<-full_join(popgraph1, popgraph2, by= c("year", "name", "gdp", "population"))
+```
+
+```{r}
+popgraph %>% 
+  ggplot(aes(x=name, y= population))+
+  geom_col(aes(fill = name))+
+    theme(axis.text.x= element_text(angle = 45))+
+  labs(title = "Population of the top 5 and bottom 5 GDP countries",
+       x="Country",
+       Y="Population")
+```
+```{r}
+popgraph %>% 
+  ggplot(aes(x=name, y= gdp))+
+  geom_col(aes(fill = name))+
+  theme(axis.text.x= element_text(angle = 45))+
+  labs(title = "Countries with the lowest and highest GDP",
+       x="Country", 
+       y= "GDP")
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
