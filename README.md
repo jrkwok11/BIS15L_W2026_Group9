@@ -1,7 +1,7 @@
 # BIS15L_W2026_Group9
 Names: Joanna Kwok, Mia Lastres
-- Subject Matter: comparing global trends of different countries, their signifigance and data
-gapminder
+- Data: Gapminder
+- Subject Matter: comparing global trends of different countries, their signifigance, and correlations
 ___
 - Population =  Total population counts the number of inhabitants in the territory 
 - GDP per capita = Gross domestic product per person adjusted for differences in purchasing power (in international dollars, --fixed 2021 prices, PPP based on 2021 ICP)
