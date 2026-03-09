@@ -60,14 +60,14 @@ ui <- dashboardPage(
     fluidRow(
       box(
         title = textOutput("plot1_title"),
-        status = "primary",
+        status = "info",
         solidHeader = T,
         width = 6,
         plotOutput("plot1", height = "500px")
       ),
       box(
         title = "USA throughout the years",
-        status = "success",
+        status = "danger",
         solidHeader = T,
         width = 6,
         plotOutput("plot2", height = "500px")
