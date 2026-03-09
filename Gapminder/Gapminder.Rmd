@@ -22,38 +22,40 @@ library(shinythemes)
 #Data set and cleaning
 
 ```{r}
-gapminder_life_expectancy<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Life_expectancy.csv") 
+gapminder_life_expectancy<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Life_expectancy.csv") 
 ```
 
 ```{r}
-co2_emissions<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/co2_pcap_cons.csv")
+co2_emissions<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/co2_pcap_cons.csv")
 ```
 
 ```{r}
-Pop<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/pop.csv")
+Pop<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/pop.csv")
 ```
 
 ```{r}
-Hiv_death<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/hiv_death.csv")
+Hiv_death<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/hiv_death.csv")
 ```
 ```{r}
-Child_death<- read.csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/number_of_child_deaths.csv")
+Child_death<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/number_of_child_deaths.csv")
 
 ```
 
 ```{r}
-kcals_per_day<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/kilocalories_per_person_and_day.csv")
+#can we get rid of this from the df?
+
+kcals_per_day<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/kilocalories_per_person_and_day.csv")
 ```
 
 ```{r}
-gdp<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/gdp.csv")
+gdp<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/gdp.csv")
 ```
 ```{r}
-lung_cancerF<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_f.csv")
+lung_cancerF<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_f.csv")
 ```
 
 ```{r}
-lung_cancerM<- read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_m.csv")
+lung_cancerM<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_m.csv")
 ```
 
 
@@ -176,7 +178,7 @@ write.csv(gapminder, file="gapminder.csv", row.names=FALSE)
 ```
 
 ```{r}
-gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
+gapminder<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
 gapminder
 ```
 
@@ -299,22 +301,48 @@ gapminder
 ```
 
 ```{r}
-
+gapminder %>% 
+  distinct(name) %>% 
+  arrange(name)
 ```
+
+
+
+
+```{r}
+gapminder <- gapminder %>% 
+  mutate(continent = case_when(
+    name %in% c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela") ~ "South America",
+    
+    name %in% c("Australia", "Papua New Guinea", "New Zealand", "Fiji", "Solomon Islands", "Vanuatu", "Samoa", "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau", "Nauru", "Tuvalu", "Micronesia, Fed. Sts.") ~ "Oceania",
+    
+    name %in% c("USA", "Mexico", "Canada", "Guatemala", "Haiti", "Dominican Republic", "Honduras", "Cuba", "Nicaragua", "El Salvador", "Costa Rica", "Panama", "Jamaica", "Trinidad and Tobago", "Belize", "Bahamas", "Barbados", "St. Lucia", "Grenada", "St. Vincent and the Grenadines", "Antigua and Barbuda", "Dominica", "St. Kitts and Nevis") ~ "North America",
+    
+    name %in% c("Germany", "UK", "France", "Italy","Spain", "	Ukraine", "Poland", "Romania", "Netherlands", "Belgium", "Sweden", "Czech Republic", "	Portugal", "Greece", "Hungary","Austria", "	Switzerland", "Belarus", "Bulgaria", "Serbia", "Denmark", "Norway", "Finland", "Finland", "Ireland", "Croatia", "	Bosnia and Herzegovina", "Moldova", "Lithuania", "Albania", "Slovenia", "Latvia", "North Macedonia", "Cyprus", "Estonia", "Luxembourg", "Montenegro", "Malta", "Iceland", "Andorra", "Liechtenstein", "Monaco", "San Marino", "Vatican City", "Bosnia and Herzegovina", "Switzerland", "Portugal", "Slovak Republic", "Ukraine", "Holy See") ~ "Europe",
+    
+    name %in% c("Russia", "Azerbaijan") ~ "Eurasia",
+    
+    name %in% c("India", "China", "Indonesia", "Pakistan", "Bangladesh", "Japan", "Philippines", "Vietnam", "Iran", "Turkey", "Thailand", "Myanmar", "South Korea", "Iraq", "Afghanistan", "Yemen", "Uzbekistan", "Malaysia", "Saudi Arabia", "Nepal", "North Korea", "Syria", "Sri Lanka", "Kazakhstan", "	Cambodia", "Jordan", "UAE", "Tajikistan", "	Azerbaijan", "Israel", "Laos", "Turkmenistan", "Kyrgyzstan", "Singapore", "Lebanon", "Palestine", "Oman", "Kuwait", "Georgia", "	Mongolia", "Qatar", "Armenia", "Bahrain", "Timor-Leste", "Bhutan", "	Maldives", "Brunei", "Kyrgyz Republic", "Cambodia", "Lao", "Maldives", "Mongolia") ~ "Asia", 
+    
+    name %in% c("Nigeria", "Ethiopia", "Egypt", "Congo, Dem. Rep.", "Tanzania", "South Africa", "Kenya", "Sudan", "Uganda", "Algeria", "Angola", "Morocco", "Mozambique", "Ghana", "Madagascar", "Cameroon", "Niger", "Mali", "Burkina Faso", "Malawi", "Zambia", "Chad", "Somalia", "Senegal", "Zimbabwe", "Guinea", "Benin", "Rwanda", "Burundi", "South Sudan", "Tunisia", "Togo", "Sierra Leone", "Libya", "Congo, Rep.", "Liberia", "Central African Republic", "Mauritania", "Eritrea", "Namibia", "Gambia", "Gabon", "Botswana", "Lesotho", "Guinea-Bissau", "Equatorial Guinea", "Eswatini", "	Mauritius", "Djibouti", "Comoros", "Cape Verde", "Sao Tome and Principe", "Seychelles", "Cote d'Ivoire", "Mauritius") ~ "Africa"
+  ))
+```
+
+
 
 
 ```{r}
 gapminder %>% 
   filter(year== "2022") %>% 
   ggplot(aes(x= gdp, y= cild_death ))+
-    geom_point(aes(colour= name))+
+    geom_point(aes(colour= continent))+
   scale_y_log10()+
   scale_x_log10()+
     geom_smooth(method = lm, rm=T, legend= NULL)+
   labs(title = "GDP vs Child death",
        x= "GDP", 
-       y= "Reported Child Deaths")+
-  theme(legend.position= "none")
+       y= "Reported Child Deaths",
+       color = "Continent")
  
 ```
 
