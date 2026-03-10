@@ -375,17 +375,17 @@ popgraph<-full_join(popgraph1, popgraph2, by= c("year", "name", "gdp", "populati
 popgraph %>% 
   ggplot(aes(x=name, y= population))+
   geom_col(aes(fill = name))+
-    theme(axis.text.x= element_text(angle = 45))+
+    theme(axis.text.x= element_text(angle = 45, vjust= 0.5))+
   labs(title = "Population of the top 5 and bottom 5 GDP countries",
        x="Country",
        y="Population",
-       fill= "Country")
+       fill= "country")
 ```
 ```{r}
 popgraph %>% 
   ggplot(aes(x=name, y= gdp))+
   geom_col(aes(fill = name))+
-  theme(axis.text.x= element_text(angle = 45))+
+  theme(axis.text.x= element_text(angle = 45, vjust = 0.5S))+
   labs(title = "Countries with the lowest and highest GDP",
        x="Country", 
        y= "GDP",

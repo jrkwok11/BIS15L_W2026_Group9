@@ -20,7 +20,7 @@ library(shinythemes)
 ```
 
 ```{r}
-gapminder<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
+gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
 #gapminder
 ```
 
