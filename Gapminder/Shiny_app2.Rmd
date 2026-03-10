@@ -1,0 +1,104 @@
+---
+title: "shiny app 2"
+output: html_document
+date: "2026-03-10"
+---
+
+```{r}
+library(tidyverse)
+library(tibble)
+library(janitor)
+library(naniar)
+library(dplyr)
+library(shiny)
+library(shinydashboard)
+library(shinythemes)
+```
+
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+   selectInput("filter",
+              "select country",
+              choices = unique(gapminder$name),
+              selected = "continent"),
+    
+    selectInput("y",
+              "Select Variable",
+              choices = c("life_expectancy",
+                          "Co2_emissions",
+                          "population",
+                          "gdp"),
+              selected = "population"), 
+  
+  sliderInput("Range",
+              label = "choose years",
+              min = min(gapminder$year, na.rm = T),
+              max = max(gapminder$year, na.rm = T),
+              value = c(1915, 2022),
+              step = 1,
+              sep = "")
+)
+dashboardBody(
+
+ fluidRow(
+      box(
+        title = textOutput("plot1_title"),
+        status = "info",
+        solidHeader = T,
+        width = 6,
+        plotOutput("plot1", height = "500px")
+      ),
+      box(
+        title = "USA throughout the years",
+        status = "danger",
+        solidHeader = T,
+        width = 6,
+        plotOutput("plot2", height = "500px")),
+
+server <- function(input, output, session) {
+   
+  output$plot1_title <- renderText(paste(input$filter, "throughout years"))
+  
+  output$plot1 <- renderPlot({
+    
+    gapminder %>% 
+      filter(name == input$filter,
+             year >= input$Range[1],
+             year <= input$Range[2]) %>% 
+      ggplot(aes(x=year, y=.data[[input$y]], na.rm=T))+
+      scale_y_log10()+
+      geom_line(color= "yellow")+
+      geom_point(na.rm=T, shape=1, color= "blue")+
+      scale_x_continuous(limits = input$Range)+
+      theme(legend.position = "none",
+            axis.text.x = element_text(hjust=1, size = 25),
+            axis.text.y = element_text(hjust = 1, size = 20))+
+      labs(x="Year")
+    })
+  
+  
+  output$plot2<-renderPlot({
+    gapminder %>% 
+      filter(name=="USA",
+             year >= input$Range[1],
+             year <= input$Range[2]) %>% 
+      ggplot(aes(x=year, y=.data[[input$y]]))+
+      geom_line(aes(color="tomato"))+
+      geom_point(shape=1, na.rm=T, color="blue")+
+      scale_y_log10()+
+      scale_x_continuous(limits = input$Range)+
+      theme(axis.text.x = element_text( hjust=1, size=25),
+            axis.text.y = element_text (hjust=1, size=20), 
+            legend.position= "none")+
+      labs(title="USA throughout years",
+           x="Years",
+           y=input$y)
+  })
+}
+
+shinyApp(ui, server)
+```
+
