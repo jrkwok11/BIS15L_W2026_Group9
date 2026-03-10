@@ -30,6 +30,11 @@ co2_emissions<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gap
 ```
 
 ```{r}
+getwd()
+
+
+
+
 Pop<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/pop.csv")
 ```
 
@@ -166,6 +171,25 @@ gapminder<- gapminder %>%
   filter(year>= "1915", year<="2022")
 ```
 
+```{r}
+gapminder <- gapminder %>% 
+  mutate(continent = case_when(
+    name %in% c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela") ~ "South America",
+    
+    name %in% c("Australia", "Papua New Guinea", "New Zealand", "Fiji", "Solomon Islands", "Vanuatu", "Samoa", "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau", "Nauru", "Tuvalu", "Micronesia, Fed. Sts.") ~ "Oceania",
+    
+    name %in% c("USA", "Mexico", "Canada", "Guatemala", "Haiti", "Dominican Republic", "Honduras", "Cuba", "Nicaragua", "El Salvador", "Costa Rica", "Panama", "Jamaica", "Trinidad and Tobago", "Belize", "Bahamas", "Barbados", "St. Lucia", "Grenada", "St. Vincent and the Grenadines", "Antigua and Barbuda", "Dominica", "St. Kitts and Nevis") ~ "North America",
+    
+    name %in% c("Germany", "UK", "France", "Italy","Spain", "	Ukraine", "Poland", "Romania", "Netherlands", "Belgium", "Sweden", "Czech Republic", "	Portugal", "Greece", "Hungary","Austria", "	Switzerland", "Belarus", "Bulgaria", "Serbia", "Denmark", "Norway", "Finland", "Finland", "Ireland", "Croatia", "	Bosnia and Herzegovina", "Moldova", "Lithuania", "Albania", "Slovenia", "Latvia", "North Macedonia", "Cyprus", "Estonia", "Luxembourg", "Montenegro", "Malta", "Iceland", "Andorra", "Liechtenstein", "Monaco", "San Marino", "Vatican City", "Bosnia and Herzegovina", "Switzerland", "Portugal", "Slovak Republic", "Ukraine", "Holy See") ~ "Europe",
+    
+    name %in% c("Russia", "Azerbaijan") ~ "Eurasia",
+    
+    name %in% c("India", "China", "Indonesia", "Pakistan", "Bangladesh", "Japan", "Philippines", "Vietnam", "Iran", "Turkey", "Thailand", "Myanmar", "South Korea", "Iraq", "Afghanistan", "Yemen", "Uzbekistan", "Malaysia", "Saudi Arabia", "Nepal", "North Korea", "Syria", "Sri Lanka", "Kazakhstan", "	Cambodia", "Jordan", "UAE", "Tajikistan", "	Azerbaijan", "Israel", "Laos", "Turkmenistan", "Kyrgyzstan", "Singapore", "Lebanon", "Palestine", "Oman", "Kuwait", "Georgia", "	Mongolia", "Qatar", "Armenia", "Bahrain", "Timor-Leste", "Bhutan", "	Maldives", "Brunei", "Kyrgyz Republic", "Cambodia", "Lao", "Maldives", "Mongolia") ~ "Asia", 
+    
+    name %in% c("Nigeria", "Ethiopia", "Egypt", "Congo, Dem. Rep.", "Tanzania", "South Africa", "Kenya", "Sudan", "Uganda", "Algeria", "Angola", "Morocco", "Mozambique", "Ghana", "Madagascar", "Cameroon", "Niger", "Mali", "Burkina Faso", "Malawi", "Zambia", "Chad", "Somalia", "Senegal", "Zimbabwe", "Guinea", "Benin", "Rwanda", "Burundi", "South Sudan", "Tunisia", "Togo", "Sierra Leone", "Libya", "Congo, Rep.", "Liberia", "Central African Republic", "Mauritania", "Eritrea", "Namibia", "Gambia", "Gabon", "Botswana", "Lesotho", "Guinea-Bissau", "Equatorial Guinea", "Eswatini", "	Mauritius", "Djibouti", "Comoros", "Cape Verde", "Sao Tome and Principe", "Seychelles", "Cote d'Ivoire", "Mauritius") ~ "Africa"
+  ))
+```
+
 
 #final data set
 
@@ -178,7 +202,7 @@ write.csv(gapminder, file="gapminder.csv", row.names=FALSE)
 ```
 
 ```{r}
-gapminder<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
+gapminder<-read_csv("gapminder.csv")
 gapminder
 ```
 
@@ -390,6 +414,11 @@ popgraph %>%
        x="Country", 
        y= "GDP",
        fill= "Country")
+```
+```{r}
+gapminder %>% 
+  group_by (continent) %>% 
+  summarize(mean(life_expectancy, na.rm = T))
 ```
 
 

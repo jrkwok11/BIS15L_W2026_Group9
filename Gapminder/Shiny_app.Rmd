@@ -20,7 +20,7 @@ library(shinythemes)
 ```
 
 ```{r}
-gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/gapminder.csv")
+gapminder<-read_csv("gapminder.csv")
 #gapminder
 ```
 
@@ -29,7 +29,7 @@ gapminder<-read_csv("C:/Users/Miala/OneDrive/Desktop/BIS15L_W2026_Group9/Gapmind
 ```{r}
 ui <- dashboardPage(
   
-  dashboardHeader(title = "Countries Throughout The Years"),
+  dashboardHeader(
  
   dashboardSidebar(
     
@@ -114,6 +114,7 @@ server <- function(input, output, session) {
            x="Years",
            y=input$y)
   })
+  
 }
 
 shinyApp(ui, server)
