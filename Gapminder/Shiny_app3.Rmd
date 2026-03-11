@@ -25,6 +25,9 @@ gapminder<- read_csv("gapminder.csv")
 library(shiny)
 
 ui <- fluidPage(
+  
+  actionButton("show", "Info"),
+  
   theme = shinytheme("superhero"),
   
    titlePanel("CO2 Emission For Each Continent Throughout the Years"),
@@ -67,8 +70,16 @@ server <- function(input, output, session) {
         radius = ~2*(Co2_emissions),
         color = "brown",
         fillColor = "tomato", 
-        weight = 1
+        weight = 3
       ) 
+  })
+  
+  observeEvent(input$show, {
+    showModal(modalDialog(
+      title = "About Graph and App",
+      "In this app, users can select a year using the slider to see the CO2 emissions from all continents from that year. An animation is included to see the CO2 emissions from all continents from the years 1980 to 2022 by pressing the 'play' button",
+      footer = modalButton("OK!")
+    ))
   })
 }
 
