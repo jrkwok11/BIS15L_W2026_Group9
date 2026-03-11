@@ -9,6 +9,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
+install.packages("bsicons")
+install.packages("shinyBS")
+```
+
+
+```{r}
 library(tidyverse)
 library(tibble)
 library(janitor)
@@ -17,6 +23,9 @@ library(dplyr)
 library(shiny)
 library(shinydashboard)
 library(shinythemes)
+library(bslib)
+library(bsicons)
+library(shinyBS)
 ```
 
 ```{r}
@@ -28,6 +37,8 @@ gapminder<-read_csv("gapminder.csv")
 
 ```{r}
 ui <- fluidPage(
+  
+  actionButton("show", "Info"),
   
   theme = shinytheme("superhero"),
   
@@ -112,6 +123,14 @@ server <- function(input, output, session) {
       labs(title="USA throughout years",
            x="Years",
            y=input$y)
+    })
+  
+  observeEvent(input$show, {
+    showModal(modalDialog(
+      title = "About Graph and App",
+      "In this app, users can select from any country and see that county's trends for life expectancy, population, CO2 emissions, and GDP per capita compared to the trends in the USA. Users can also use the slider to set a range of years for the x axis of the graph",
+      footer = modalButton("OK!")
+    ))
   })
   
 }
