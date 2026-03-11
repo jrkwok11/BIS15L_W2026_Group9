@@ -27,6 +27,8 @@ library(shiny)
 
 ui <- fluidPage( 
   
+  actionButton("show", "Info"),
+  
   theme = shinytheme("superhero"),
   
   sidebarLayout(
@@ -74,11 +76,13 @@ server <- function(input, output, session) {
   
   output$plot <- renderPlotly({
     
-    gapminder %>%
+    p <- gapminder %>%
       filter(year == input$year,
              continent %in% input$continents) %>% 
-      ggplot(aes(x=gdp, y=life_expectancy, colour = continent))+
-      geom_point(aes(alpha = 0.7))+
+      ggplot(aes(x=gdp, y=life_expectancy, colour = continent, text= paste0("Country: ", name, 
+                                                                            "\nGDP per capita: ", gdp, 
+                                                                            "\nLife Expectancy: ", life_expectancy)))+
+      geom_point(alpha = 0.7)+
       scale_x_log10()+
       scale_x_continuous(limits = input$Range)+
       theme(axis.text.x = element_text(hjust=1, size = 20),
@@ -86,7 +90,17 @@ server <- function(input, output, session) {
       labs(x= "GDP per Capita", 
            y= "Life Expectancy",
            color = "Continents")
+    
+      ggplotly(p, tooltip = "text")
     })
+  
+  observeEvent(input$show, {
+    showModal(modalDialog(
+      title = "About Graph and App",
+      "In this app, users can select and deselect continents to see a scatterplot of that continent's life expectancy versus GPD per capita. Continents are color coded. Each point on the scatterplot represents one country of the respected continent. Users can hover over a point to get more information of that represented country including the country name, its GDP per capita, and life expectancy. There is also a function that allows the user to compare the numbers of other points close by. Users can also use the slider to find a certain year to further investigate. An animation of the trend is also included if the user presses the 'play' button",
+      footer = modalButton("OK!")
+    ))
+  })
   
 }
 
