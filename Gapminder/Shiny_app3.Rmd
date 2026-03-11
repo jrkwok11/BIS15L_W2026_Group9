@@ -5,7 +5,6 @@ output: html_document
 ---
 
 ```{r}
-install.packages("leaflet")
 library(leaflet)
 library(tidyverse)
 library(tibble)
@@ -15,14 +14,6 @@ library(dplyr)
 library(shiny)
 library(shinydashboard)
 library(shinythemes)
-```
-```{r}
-install.packages("remotes")
-remotes::install_github("bhaskarvk/leaflet.extras")
-```
-
-```{r}
-library(leaflet.extras)
 ```
 
 
@@ -36,6 +27,8 @@ library(shiny)
 ui <- fluidPage(
   theme = shinytheme("superhero"),
   
+   titlePanel("CO2 Emission For Each Continent Throughout the Years"),
+  
   sidebarLayout(
     sidebarPanel(
       sliderInput("year",
@@ -44,7 +37,13 @@ ui <- fluidPage(
                   max = 2022,
                   value = 2000,
                   step = 1,
-                  sep = "")
+                  sep = "",
+                  animate = animationOptions(
+                    interval = 200,
+                    loop = T,
+                    playButton = "play",
+                    pauseButton = "pause"
+                  ))
     ),
     
     mainPanel (
@@ -55,8 +54,30 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
+  output$map <- renderLeaflet({
+    
+    map_data <- gapminder %>% 
+      filter(year == input$year) 
+    
+    leaflet(map_data) %>% 
+      addProviderTiles("Stadia.AlidadeSmoothDark") %>%
+      addCircleMarkers(
+        lng = ~as.numeric(longitude),
+        lat = ~as.numeric(latitude),
+        radius = ~2*(Co2_emissions),
+        color = "brown",
+        fillColor = "tomato", 
+        weight = 1
+      ) 
+  })
 }
 
 shinyApp(ui, server)
 ```
+
+```{r}
+gapminder %>% 
+  select(Co2_emissions)
+```
+
 

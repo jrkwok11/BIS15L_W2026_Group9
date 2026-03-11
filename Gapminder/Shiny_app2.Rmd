@@ -45,7 +45,13 @@ ui <- fluidPage(
               max =  2022,
               value = 2000,
               step = 1,
-              sep = "")
+              sep = "",
+              animate = animationOptions(
+                interval = 250,
+                loop = T,
+                playButton = "play",
+                pauseButton = "pause"
+              ))
     ),
     
     mainPanel(

@@ -217,6 +217,13 @@ gapminder <- gapminder %>%
   ))
 ```
 
+```{r}
+gapminder <- gapminder %>% 
+  mutate(longitude = as.numeric(longitude),
+         latitude = as.numeric(latitude))
+```
+
+
 #final data set
 
 ```{r}
