@@ -5,7 +5,8 @@ date: "2026-03-10"
 ---
 
 ```{r}
-
+install.packages("plotly")
+library(plotly)
 library(tidyverse)
 library(tibble)
 library(janitor)
@@ -20,58 +21,65 @@ library(shinythemes)
 gapminder<- read_csv("gapminder.csv")
 ```
 
-```{r}
-
-```
-
 
 ```{r}
 library(shiny)
 
 ui <- fluidPage( 
   
-   selectInput("filter",
-              "select continent",
-              choices = unique(gapminder$continent),
-              selected = "North America"),
-    
+  theme = shinytheme("superhero"),
   
-  sliderInput("Range",
+  sidebarLayout(
+    
+    sidebarPanel(
+      
+      checkboxGroupInput("continents",
+                         label = "select",
+                         choices = unique(gapminder$continent),
+                         selected = unique(gapminder$continent)
+                         ),
+      
+      sliderInput("year",
               label = "choose years",
               min =1980,
               max =  2022,
               value = 2000,
               step = 1,
               sep = "")
+    ),
+    
+    mainPanel(
+      
+      fluidRow(
+        column(12,
+               h4(textOutput("plot_title")),
+               plotlyOutput("plot", height = "500px")
+    )
+   )
+  )
+ )
 )
 
-
- fluidRow(
-      box(
-        title = textOutput("plot_title"),
-        status = "info",
-        solidHeader = T,
-        width = 6,
-        plotOutput("plot", height = "500px")
-      ))
+ 
 
 server <- function(input, output, session) {
    
-  output$plot_title <- renderText(paste(input$filter, "throughout years"))
+  output$plot_title <- renderText(paste("Life Expectancy versus GDP per Capita"))
   
-  output$plot <- renderPlot({
+  output$plot <- renderPlotly({
     
-    gapminder %>% 
-      filter(continent == input$filter,
-             year >= input$Range[1],
-             year <= input$Range[2]) %>% 
-      ggplot(aes(x=gdp, y=life_expectancy, na.rm=T))+
-      geom_boxplot()+
+    gapminder %>%
+      filter(year == input$year,
+             continent %in% input$continents) %>% 
+      ggplot(aes(x=gdp, y=life_expectancy, colour = continent))+
+      geom_point(aes(alpha = 0.7))+
+      scale_x_log10()+
       scale_x_continuous(limits = input$Range)+
-      theme(legend.position = "none",
-            axis.text.x = element_text(hjust=1, size = 25),
+      theme(axis.text.x = element_text(hjust=1, size = 20),
             axis.text.y = element_text(hjust = 1, size = 20))+
-      labs(x="")
+      labs(x= "GDP per Capita", 
+           y= "Life Expectancy",
+           color = "Continents")
     })
   
 }

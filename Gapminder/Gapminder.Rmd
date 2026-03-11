@@ -409,7 +409,7 @@ popgraph %>%
 popgraph %>% 
   ggplot(aes(x=name, y= gdp))+
   geom_col(aes(fill = name))+
-  theme(axis.text.x= element_text(angle = 45, vjust = 0.5S))+
+  theme(axis.text.x= element_text(angle = 45, vjust = 0.5))+
   labs(title = "Countries with the lowest and highest GDP",
        x="Country", 
        y= "GDP",
@@ -419,6 +419,13 @@ popgraph %>%
 gapminder %>% 
   group_by (continent) %>% 
   summarize(mean(life_expectancy, na.rm = T))
+```
+
+
+##Add coordinates or each continent 
+
+```{r}
+
 ```
 
 

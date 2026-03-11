@@ -5,6 +5,8 @@ output: html_document
 ---
 
 ```{r}
+install.packages("leaflet")
+library(leaflet)
 library(tidyverse)
 library(tibble)
 library(janitor)
@@ -14,8 +16,47 @@ library(shiny)
 library(shinydashboard)
 library(shinythemes)
 ```
+```{r}
+install.packages("remotes")
+remotes::install_github("bhaskarvk/leaflet.extras")
+```
+
+```{r}
+library(leaflet.extras)
+```
+
 
 ```{r}
 gapminder<- read_csv("gapminder.csv")
+```
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  theme = shinytheme("superhero"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("year",
+                  label = "choose year",
+                  min = 1980,
+                  max = 2022,
+                  value = 2000,
+                  step = 1,
+                  sep = "")
+    ),
+    
+    mainPanel (
+      leafletOutput("map", height = "500px")
+    )
+  )
+)
+
+server <- function(input, output, session) {
+  
+}
+
+shinyApp(ui, server)
 ```
 
