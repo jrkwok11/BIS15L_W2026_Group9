@@ -191,6 +191,32 @@ gapminder <- gapminder %>%
 ```
 
 
+```{r}
+gapminder <- gapminder %>% 
+  mutate(longitude = case_when(
+    continent %in% "Africa" ~ "19.5687",
+    continent %in% "Asia" ~ "87.3311",
+    continent %in% "Eurasia" ~ "70.5158",
+    continent %in% "Europe" ~ "25.3200",
+    continent %in% "North America" ~ "-100.1667",
+    continent %in% "Oceania" ~ "133.2102",
+    continent %in% "South America" ~ "-56.1015"
+  ))
+```
+
+```{r}
+gapminder <- gapminder %>% 
+  mutate(latitude = case_when(
+    continent %in% "Africa" ~ "6.614",
+    continent %in% "Asia" ~ "48.35",
+    continent %in% "Eurasia" ~ "49.5786",
+    continent %in% "Europe" ~ "54.9067",
+    continent %in% "North America" ~ "48.1667",
+    continent %in% "Oceania" ~ "-25.9458",
+    continent %in% "South America" ~ "-15.5991"
+  ))
+```
+
 #final data set
 
 ```{r}
@@ -424,9 +450,7 @@ gapminder %>%
 
 ##Add coordinates or each continent 
 
-```{r}
 
-```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
