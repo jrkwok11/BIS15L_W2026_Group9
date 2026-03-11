@@ -27,54 +27,53 @@ gapminder<-read_csv("gapminder.csv")
 
 
 ```{r}
-ui <- dashboardPage(
+ui <- fluidPage(
   
-  dashboardHeader(
- 
-  dashboardSidebar(
-    
-    selectInput("filter",
+  theme = shinytheme("superhero"),
+  
+  titlePanel("ur mom"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      
+      selectInput("filter",
               "select country",
               choices = unique(gapminder$name),
               selected = "Afghanistan"),
-    
-    selectInput("y",
+      
+      selectInput("y",
               "Select Variable",
               choices = c("life_expectancy",
                           "Co2_emissions",
                           "population",
                           "gdp"),
               selected = "population"), 
-  
-  sliderInput("Range",
+      
+      sliderInput("Range",
               label = "choose years",
               min = min(gapminder$year, na.rm = T),
               max = max(gapminder$year, na.rm = T),
               value = c(1915, 2022),
               step = 1,
               sep = "")
-),
-  
-  dashboardBody(
+    ),
     
-    fluidRow(
-      box(
-        title = textOutput("plot1_title"),
-        status = "info",
-        solidHeader = T,
-        width = 6,
-        plotOutput("plot1", height = "500px")
-      ),
-      box(
-        title = "USA throughout the years",
-        status = "danger",
-        solidHeader = T,
-        width = 6,
-        plotOutput("plot2", height = "500px")
+    mainPanel(
+      
+      fluidRow(
+        column(6,
+               h4(textOutput("plot1_title")),
+               plotOutput("plot1", height = "500px")
+               ),
+        
+        column(6,
+               h4("USA Throughout the Years"),
+               plotOutput("plot2", height = "500px"))
+        )
       )
     )
   )
-)
+
 server <- function(input, output, session) {
   
   output$plot1_title <- renderText(paste(input$filter, "throughout years"))

@@ -1,0 +1,21 @@
+---
+title: "Shiny_app3"
+date: "2026-03-11"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(tibble)
+library(janitor)
+library(naniar)
+library(dplyr)
+library(shiny)
+library(shinydashboard)
+library(shinythemes)
+```
+
+```{r}
+gapminder<- read_csv("gapminder.csv")
+```
+
