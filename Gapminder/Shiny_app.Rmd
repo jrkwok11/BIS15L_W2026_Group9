@@ -31,7 +31,7 @@ ui <- fluidPage(
   
   theme = shinytheme("superhero"),
   
-  titlePanel("ur mom"),
+  titlePanel("Countries Throughout the Years"),
   
   sidebarLayout(
     sidebarPanel(
