@@ -15,12 +15,13 @@ install.packages("shinyBS")
 
 
 ```{r}
+#load required packages 
 library(tidyverse)
 library(tibble)
 library(janitor)
 library(naniar)
-library(dplyr)
 library(shiny)
+#shiny+UI tools 
 library(shinydashboard)
 library(shinythemes)
 library(bslib)
@@ -28,30 +29,32 @@ library(bsicons)
 library(shinyBS)
 ```
 
+#load data (mia)
 ```{r}
 gapminder<-read_csv("gapminder.csv")
 #gapminder
 ```
 
 
-
+#shiny app
 ```{r}
 ui <- fluidPage(
-  
+  #button to show app info (Joanna)
   actionButton("show", "Info"),
-  
+  #theme (joanna)
   theme = shinytheme("superhero"),
-  
+  #app title (joanna)
   titlePanel("Countries Throughout the Years"),
   
   sidebarLayout(
     sidebarPanel(
       
+      #country selector (joanna)
       selectInput("filter",
               "select country",
               choices = unique(gapminder$name),
               selected = "Afghanistan"),
-      
+      #variable selector (mia)
       selectInput("y",
               "Select Variable",
               choices = c("life_expectancy",
@@ -59,7 +62,7 @@ ui <- fluidPage(
                           "population",
                           "gdp"),
               selected = "population"), 
-      
+     #year range slider (joanna) 
       sliderInput("Range",
               label = "choose years",
               min = min(gapminder$year, na.rm = T),
@@ -72,21 +75,22 @@ ui <- fluidPage(
     mainPanel(
       
       fluidRow(
-        column(6,
+       #plot 1 (mia) column(6,
                h4(textOutput("plot1_title")),
                plotOutput("plot1", height = "500px")
                ),
         
-        column(6,
+     #plot 2 (mia)   column(6,
                h4("USA Throughout the Years"),
                plotOutput("plot2", height = "500px"))
         )
       )
-    )
-  )
+    
+  
 
 server <- function(input, output, session) {
   
+#title for the plot (mia)
   output$plot1_title <- renderText(paste(input$filter, "throughout years"))
   
   output$plot1 <- renderPlot({
@@ -106,7 +110,7 @@ server <- function(input, output, session) {
       labs(x="Year")
     })
   
-  
+ #plot 2, usa comparison (mia) 
   output$plot2<-renderPlot({
     gapminder %>% 
       filter(name=="USA",
@@ -124,7 +128,7 @@ server <- function(input, output, session) {
            x="Years",
            y=input$y)
     })
-  
+  #info tab (joanna)
   observeEvent(input$show, {
     showModal(modalDialog(
       title = "About Graph and App",
@@ -136,10 +140,6 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-```
-
-```{r}
-
 ```
 
 

@@ -3,7 +3,7 @@ title: "Shiny_app3"
 date: "2026-03-11"
 output: html_document
 ---
-
+#load libraries 
 ```{r}
 library(leaflet)
 library(tidyverse)
@@ -16,24 +16,26 @@ library(shinydashboard)
 library(shinythemes)
 ```
 
-
+#load data
 ```{r}
 gapminder<- read_csv("gapminder.csv")
 ```
-
+#shiny app fully done by joanna as well
 ```{r}
 library(shiny)
-
+#what the user sees
 ui <- fluidPage(
-  
+  #button to show info popup
   actionButton("show", "Info"),
-  
+  #theme styling
   theme = shinytheme("superhero"),
-  
+  #app title
    titlePanel("CO2 Emission For Each Continent Throughout the Years"),
   
   sidebarLayout(
+    #sidebar controls
     sidebarPanel(
+      #sidebar to choose year (with animation)
       sliderInput("year",
                   label = "choose year",
                   min = 1980,
@@ -41,6 +43,7 @@ ui <- fluidPage(
                   value = 2000,
                   step = 1,
                   sep = "",
+                  #animation feature
                   animate = animationOptions(
                     interval = 200,
                     loop = T,
@@ -48,7 +51,7 @@ ui <- fluidPage(
                     pauseButton = "pause"
                   ))
     ),
-    
+    #map output
     mainPanel (
       leafletOutput("map", height = "500px")
     )
@@ -56,24 +59,30 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  
+ #render the leaflet map 
   output$map <- renderLeaflet({
-    
+    #filter data for selected year
     map_data <- gapminder %>% 
       filter(year == input$year) 
     
+    #create map
     leaflet(map_data) %>% 
+      #darktheme map tiles
       addProviderTiles("Stadia.AlidadeSmoothDark") %>%
+      #circle markers for each data point
       addCircleMarkers(
+        #coordinates
         lng = ~as.numeric(longitude),
         lat = ~as.numeric(latitude),
+        #size based on co2 emission
         radius = ~2*(Co2_emissions),
+        #styling 
         color = "brown",
         fillColor = "tomato", 
         weight = 3
       ) 
   })
-  
+  #info tab
   observeEvent(input$show, {
     showModal(modalDialog(
       title = "About Graph and App",

@@ -9,76 +9,75 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 #Libraries
 ```{r}
-library(tidyverse)
+library(tidyverse)#includes ggplot2, dplyr, tidyr, readr
 library(tibble)
-library(janitor)
-library(naniar)
-library(dplyr)
-library(shiny)
-library(shinydashboard)
-library(shinythemes)
-```
-
-#Data set and cleaning
-
-```{r}
-gapminder_life_expectancy<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/Life_expectancy.csv") 
+library(janitor)#cleaning column names
+library(naniar)#missing data visualization
 ```
 
 ```{r}
-co2_emissions<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/co2_pcap_cons.csv")
+getwd() #checking the work directory (helps debug file path issues)
 ```
 
-```{r}
-getwd()
+#Data set and cleaning (Mia)
 
-
-
-
-Pop<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/pop.csv")
-```
 
 ```{r}
-Hiv_death<-read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/hiv_death.csv")
+#loading all of the data sets 
+gapminder_life_expectancy<- read.csv("data/Life_expectancy.csv") 
 ```
 ```{r}
-Child_death<- read.csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/number_of_child_deaths.csv")
+getwd
 
 ```
 
 ```{r}
-#can we get rid of this from the df?
-
-kcals_per_day<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/kilocalories_per_person_and_day.csv")
+co2_emissions<-read_csv("data/co2_pcap_cons.csv")
 ```
 
 ```{r}
-gdp<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/gdp.csv")
-```
-```{r}
-lung_cancerF<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_f.csv")
+
+Pop<-read_csv("Data/pop.csv")
 ```
 
 ```{r}
-lung_cancerM<- read_csv("C:/Users/jk_ic/OneDrive/Desktop/BIS15L_W2026_Group9/Gapminder/Data/lung_cancer_m.csv")
+Hiv_death<-read_csv("Data/hiv_death.csv")
+```
+
+```{r}
+Child_death<- read.csv("Data/number_of_child_deaths.csv")
+
+```
+
+```{r}
+gdp<- read_csv("Data/gdp.csv")
+```
+```{r}
+lung_cancerF<- read_csv("Data/lung_cancer_f.csv")
+```
+
+```{r}
+lung_cancerM<- read_csv("Data/lung_cancer_m.csv")
 ```
 
 
-#pivoting and fixing year + other problems
+#pivoting and fixing year + other problems (mia)
 
 ```{r}
+#converts wider to long formart (years become rows instead of collumns)
 gapminder_life_expectancy<- gapminder_life_expectancy %>% 
   pivot_longer(-c(name,geo),
                names_to = "year",
                values_to = "life_expectancy") %>% 
-  mutate(year= str_remove(year, "X"))
+  mutate(year= str_remove(year, "X"))#removes prefix x from year
 ```
 
 ```{r}
+#repeat the pivoting for all datasets
 Child_death<-Child_death %>% 
 pivot_longer(-c(name,geo),
                names_to = "year",
-               values_to = "cild_death") %>% 
+               values_to = "child_death") %>% 
   mutate(year= str_remove(year, "X")) 
 ```
 
@@ -104,13 +103,6 @@ hiv_death<- Hiv_death %>%
 ```
 
 ```{r}
-kcals_per_day<- kcals_per_day %>% 
-  pivot_longer(-c(geo,name),
-               names_to = "year",
-               values_to = "kcal")
-```
-
-```{r}
 gdp<- gdp %>% 
   pivot_longer(-c(geo,name),
                names_to = "year",
@@ -131,9 +123,10 @@ gdp<- gdp %>%
                values_to = "lung_cancerm")
 ```
 
-#joining data tables
+#Joining data tables
 
 ```{r}
+#full joins of each loaded dartaser (keeps all data even if missing)
 gp<-full_join(Child_death, gapminder_life_expectancy, by= c("name", "geo","year"))
 ```
 
@@ -150,28 +143,30 @@ gp4<-full_join(gp3,hiv_death, by= c("name", "geo", "year") )
 ```
 
 ```{r}
-gp5<- full_join(gp4, kcals_per_day, by = c("name","geo","year"))
+#gp5<- full_join(gp4, kcals_per_day, by = c("name","geo","year"))
 ```
 
 ```{r}
-gp6<- full_join(gp5, gdp, by = c("name", "year","geo") )
+gp5<- full_join(gp4, gdp, by = c("name", "year","geo") )
 ```
 
 ```{r}
-gp7<- full_join(gp6,lung_cancerF, by = c("name", "year","geo") )
+gp6<- full_join(gp5,lung_cancerF, by = c("name", "year","geo") )
 ```
 
 ```{r}
-gapminder<- full_join(gp7,lung_cancerM, by = c("name", "year","geo") )
+#the final join to have every dataset together int he tables 
+gapminder<- full_join(gp6,lung_cancerM, by = c("name", "year","geo") ) 
 ```
 
-
+#FILTERING THE YEARS (mia)
 ```{r}
 gapminder<- gapminder %>% 
-  filter(year>= "1915", year<="2022")
+  filter(year>= "1915", year<="2022") #filtering the dates to have a more manageable set to work with
 ```
-
+#seperating each country into a continent (joanna)
 ```{r}
+#assigning continent manually
 gapminder <- gapminder %>% 
   mutate(continent = case_when(
     name %in% c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela") ~ "South America",
@@ -190,8 +185,9 @@ gapminder <- gapminder %>%
   ))
 ```
 
-
+#add coordinates for mapping (Joanna)
 ```{r}
+#assigning approximate continent center coordinates
 gapminder <- gapminder %>% 
   mutate(longitude = case_when(
     continent %in% "Africa" ~ "19.5687",
@@ -231,24 +227,31 @@ gapminder
 ```
 
 ```{r}
+#dataset written as csv in order to open easier in shiny apps
 write.csv(gapminder, file="gapminder.csv", row.names=FALSE)
 ```
 
 ```{r}
 gapminder<-read_csv("gapminder.csv")
-gapminder
+#gapminder  (checking the dataset looks good)
 ```
 
-#understanding the data
+#visualiding missing values (mia)
 ```{r}
 gg_miss_var(gapminder)
 ```
-
+#summary of missing data (mia)
 ```{r}
 gapminder %>% 
   miss_var_summary(order=T)
 ```
 
+
+#Analysis examples
+
+?is there correlation between the top and bottom co2 emissions and lung cancer, does it look as though there is enough data to see?
+
+#top 3 highest co2 emissions per capita (mia)
 
 ```{r}
 gapminder %>% 
@@ -258,8 +261,6 @@ gapminder %>%
 ```
 
 
-#graphs
-top 3 highest co2 emissions per capita
 ```{r}
 gapminder %>% 
   filter(year>= "1980", year<="2022") %>% 
@@ -269,29 +270,28 @@ gapminder %>%
   slice_head(n=3)
   
 ```
-bottom 3 lowest co2 emissions
+
+#bottom 3 lowest co2 emissions (mia)
 ```{r}
 gapminder %>% 
   filter(name != c("Holy See", "Monaco", "San Marino"), year>= "1980", year<="2022") %>% 
   group_by(name) %>% 
-  summarize(avgco2=mean(Co2_emissions, rm.na=T)) %>% 
+  summarize(avgco2=mean(Co2_emissions, na.rm=T)) %>% 
   arrange(desc(avgco2)) %>% 
 slice_tail(n=6)
 
 ```
 
-6 coutnries and the lung cancer deaths
+#6 coutnries and the lung cancer deaths (mia)
 
 ```{r}
 gapminder %>% 
    filter(name ==c("Chad", "Congo, Dem. Rep.", "Burundi"), year>= "1980", year<="2022") %>% 
   group_by(name) %>% 
-  summarize(mlungavg= mean(lung_cancerm), flungavg=mean(lung_cancerf)) %>% 
-  ggplot(aes(x=name, y= ))
- 
+  summarize(mlungavg= mean(lung_cancerm), flungavg=mean(lung_cancerf)) 
 ```
 
-highest year of co2
+#highest year of co2 (mia)
 ```{r}
 gapminder %>%
   select(name, year, Co2_emissions) %>% 
@@ -300,13 +300,13 @@ pivot_wider(names_from = "year",
             values_from = Co2_emissions) 
   
 ```
-
+#add total lung cancer (mia)
 ```{r}
 gapminder<- gapminder %>% 
   mutate(lungcancertot=lung_cancerf+lung_cancerm)
 ```
 
-co2 emissions between the 3 largest states in 2000
+#co2 emissions between the 3 largest states in 2000 (mia)
 
 ```{r}
 gapminder %>%
@@ -328,7 +328,7 @@ gapminder %>%
     
 ```
 
-
+#lung cancer by sex (mia)
 
 ```{r}
 gapminder %>%
@@ -353,9 +353,11 @@ gapminder %>%
   
 
 ```
-```{r}
-gapminder
-```
+
+trying to see correlation between gdp and the amoutn of child deaths, ato later see if gdp and population have a similar or different relationship. 
+
+#gdp vs child deaths (mia)
+
 
 ```{r}
 gapminder %>% 
@@ -363,35 +365,10 @@ gapminder %>%
   arrange(name)
 ```
 
-
-
-
-```{r}
-gapminder <- gapminder %>% 
-  mutate(continent = case_when(
-    name %in% c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela") ~ "South America",
-    
-    name %in% c("Australia", "Papua New Guinea", "New Zealand", "Fiji", "Solomon Islands", "Vanuatu", "Samoa", "Kiribati", "Micronesia", "Tonga", "Marshall Islands", "Palau", "Nauru", "Tuvalu", "Micronesia, Fed. Sts.") ~ "Oceania",
-    
-    name %in% c("USA", "Mexico", "Canada", "Guatemala", "Haiti", "Dominican Republic", "Honduras", "Cuba", "Nicaragua", "El Salvador", "Costa Rica", "Panama", "Jamaica", "Trinidad and Tobago", "Belize", "Bahamas", "Barbados", "St. Lucia", "Grenada", "St. Vincent and the Grenadines", "Antigua and Barbuda", "Dominica", "St. Kitts and Nevis") ~ "North America",
-    
-    name %in% c("Germany", "UK", "France", "Italy","Spain", "	Ukraine", "Poland", "Romania", "Netherlands", "Belgium", "Sweden", "Czech Republic", "	Portugal", "Greece", "Hungary","Austria", "	Switzerland", "Belarus", "Bulgaria", "Serbia", "Denmark", "Norway", "Finland", "Finland", "Ireland", "Croatia", "	Bosnia and Herzegovina", "Moldova", "Lithuania", "Albania", "Slovenia", "Latvia", "North Macedonia", "Cyprus", "Estonia", "Luxembourg", "Montenegro", "Malta", "Iceland", "Andorra", "Liechtenstein", "Monaco", "San Marino", "Vatican City", "Bosnia and Herzegovina", "Switzerland", "Portugal", "Slovak Republic", "Ukraine", "Holy See") ~ "Europe",
-    
-    name %in% c("Russia", "Azerbaijan") ~ "Eurasia",
-    
-    name %in% c("India", "China", "Indonesia", "Pakistan", "Bangladesh", "Japan", "Philippines", "Vietnam", "Iran", "Turkey", "Thailand", "Myanmar", "South Korea", "Iraq", "Afghanistan", "Yemen", "Uzbekistan", "Malaysia", "Saudi Arabia", "Nepal", "North Korea", "Syria", "Sri Lanka", "Kazakhstan", "	Cambodia", "Jordan", "UAE", "Tajikistan", "	Azerbaijan", "Israel", "Laos", "Turkmenistan", "Kyrgyzstan", "Singapore", "Lebanon", "Palestine", "Oman", "Kuwait", "Georgia", "	Mongolia", "Qatar", "Armenia", "Bahrain", "Timor-Leste", "Bhutan", "	Maldives", "Brunei", "Kyrgyz Republic", "Cambodia", "Lao", "Maldives", "Mongolia") ~ "Asia", 
-    
-    name %in% c("Nigeria", "Ethiopia", "Egypt", "Congo, Dem. Rep.", "Tanzania", "South Africa", "Kenya", "Sudan", "Uganda", "Algeria", "Angola", "Morocco", "Mozambique", "Ghana", "Madagascar", "Cameroon", "Niger", "Mali", "Burkina Faso", "Malawi", "Zambia", "Chad", "Somalia", "Senegal", "Zimbabwe", "Guinea", "Benin", "Rwanda", "Burundi", "South Sudan", "Tunisia", "Togo", "Sierra Leone", "Libya", "Congo, Rep.", "Liberia", "Central African Republic", "Mauritania", "Eritrea", "Namibia", "Gambia", "Gabon", "Botswana", "Lesotho", "Guinea-Bissau", "Equatorial Guinea", "Eswatini", "	Mauritius", "Djibouti", "Comoros", "Cape Verde", "Sao Tome and Principe", "Seychelles", "Cote d'Ivoire", "Mauritius") ~ "Africa"
-  ))
-```
-
-
-
-
 ```{r}
 gapminder %>% 
   filter(year== "2022") %>% 
-  ggplot(aes(x= gdp, y= cild_death ))+
+  ggplot(aes(x= gdp, y= child_death ))+
     geom_point(aes(colour= continent))+
   scale_y_log10()+
   scale_x_log10()+
@@ -402,8 +379,12 @@ gapminder %>%
        color = "Continent")
  
 ```
+Here is the work we did to see if a population siz emight have an increase or a larger amount when gdp is higher, becuase child death is lower
+
+#g=creating smaller dataset (mia)
 
 ```{r}
+#creating a new data set in order to quickly plot the graphs for population vs gdp of the top 10 countries
 popgraph1<-gapminder %>% 
   select(year, name, gdp, population) %>% 
   filter(name!= "Monaco",
@@ -414,6 +395,7 @@ popgraph1<-gapminder %>%
 ```
 
 ```{r}
+#second half of the smaller dataset
 popgraph2<-gapminder %>% 
   select(year, name, gdp, population) %>% 
   filter(name!= "Monaco"&
@@ -425,8 +407,10 @@ popgraph2<-gapminder %>%
 ```
 
 ```{r}
+#joining the two datasets in order to have one graph fro the poulations
 popgraph<-full_join(popgraph1, popgraph2, by= c("year", "name", "gdp", "population"))
 ```
+#popualtion graph (mia)
 
 ```{r}
 popgraph %>% 
@@ -438,6 +422,7 @@ popgraph %>%
        y="Population",
        fill= "country")
 ```
+
 ```{r}
 popgraph %>% 
   ggplot(aes(x=name, y= gdp))+
@@ -455,7 +440,7 @@ gapminder %>%
 ```
 
 
-##Add coordinates or each continent 
+
 
 
 

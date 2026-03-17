@@ -21,26 +21,27 @@ library(shinythemes)
 gapminder<- read_csv("gapminder.csv")
 ```
 
+#shiny app (fully done by joanna)
 
 ```{r}
 library(shiny)
-
+#what the user sees
 ui <- fluidPage( 
-  
+  #info button popup
   actionButton("show", "Info"),
-  
+  #theme
   theme = shinytheme("superhero"),
   
   sidebarLayout(
     
     sidebarPanel(
-      
+   #select continents   
       checkboxGroupInput("continents",
                          label = "select",
                          choices = unique(gapminder$continent),
                          selected = unique(gapminder$continent)
                          ),
-      
+    #year slider with animation  
       sliderInput("year",
               label = "choose years",
               min =1980,
@@ -49,7 +50,7 @@ ui <- fluidPage(
               step = 1,
               sep = "",
               animate = animationOptions(
-                interval = 250,
+                interval = 250, 
                 loop = T,
                 playButton = "play",
                 pauseButton = "pause"
@@ -71,9 +72,9 @@ ui <- fluidPage(
  
 
 server <- function(input, output, session) {
-   
+#title   
   output$plot_title <- renderText(paste("Life Expectancy versus GDP per Capita"))
-  
+  #interactive plot 
   output$plot <- renderPlotly({
     
     p <- gapminder %>%
@@ -93,7 +94,7 @@ server <- function(input, output, session) {
     
       ggplotly(p, tooltip = "text")
     })
-  
+  #info popup 
   observeEvent(input$show, {
     showModal(modalDialog(
       title = "About Graph and App",
