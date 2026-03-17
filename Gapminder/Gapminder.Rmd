@@ -378,7 +378,7 @@ gapminder %>%
        color = "Continent")
  
 ```
-Here is the work we did to see if a population siz emight have an increase or a larger amount when gdp is higher, becuase child death is lower
+Here is the work we did to see if a population size might have an increase or a larger amount when gdp is higher, becuase child death is lower
 
 #g=creating smaller dataset (mia)
 
