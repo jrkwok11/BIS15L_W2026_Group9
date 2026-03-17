@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 #Libraries
 ```{r}
 library(tidyverse)#includes ggplot2, dplyr, tidyr, readr
-library(tibble)
 library(janitor)#cleaning column names
 library(naniar)#missing data visualization
 ```

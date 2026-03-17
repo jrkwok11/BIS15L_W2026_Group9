@@ -7,10 +7,6 @@ output: html_document
 ```{r}
 library(leaflet)
 library(tidyverse)
-library(tibble)
-library(janitor)
-library(naniar)
-library(dplyr)
 library(shiny)
 library(shinydashboard)
 library(shinythemes)

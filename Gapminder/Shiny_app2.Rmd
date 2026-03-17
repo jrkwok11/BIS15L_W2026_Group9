@@ -5,13 +5,11 @@ date: "2026-03-10"
 ---
 
 ```{r}
+#load libraries
 install.packages("plotly")
 library(plotly)
 library(tidyverse)
-library(tibble)
-library(janitor)
-library(naniar)
-library(dplyr)
+#shiny libraries
 library(shiny)
 library(shinydashboard)
 library(shinythemes)

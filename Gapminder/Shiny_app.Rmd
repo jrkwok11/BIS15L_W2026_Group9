@@ -17,9 +17,6 @@ install.packages("shinyBS")
 ```{r}
 #load required packages 
 library(tidyverse)
-library(tibble)
-library(janitor)
-library(naniar)
 library(shiny)
 #shiny+UI tools 
 library(shinydashboard)
