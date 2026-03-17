@@ -122,7 +122,7 @@ gdp<- gdp %>%
                values_to = "lung_cancerm")
 ```
 
-#Joining data tables
+#Joining data tables (mia)
 
 ```{r}
 #full joins of each loaded dartaser (keeps all data even if missing)
@@ -248,7 +248,7 @@ gapminder %>%
 
 #Analysis examples
 
-?is there correlation between the top and bottom co2 emissions and lung cancer, does it look as though there is enough data to see?
+is there correlation between the top and bottom co2 emissions and lung cancer, does it look as though there is enough data to see?
 
 #top 3 highest co2 emissions per capita (mia)
 
@@ -353,7 +353,7 @@ gapminder %>%
 
 ```
 
-trying to see correlation between gdp and the amoutn of child deaths, ato later see if gdp and population have a similar or different relationship. 
+trying to see correlation between gdp and the amount of child deaths, to later see if gdp and population have a similar or different relationship. 
 
 #gdp vs child deaths (mia)
 
@@ -378,9 +378,9 @@ gapminder %>%
        color = "Continent")
  
 ```
-Here is the work we did to see if a population size might have an increase or a larger amount when gdp is higher, becuase child death is lower
+Here is the work we did to see if a population size might have an increase or a larger amount when gdp is higher, because child death is lower
 
-#g=creating smaller dataset (mia)
+#creating smaller dataset (mia)
 
 ```{r}
 #creating a new data set in order to quickly plot the graphs for population vs gdp of the top 10 countries
