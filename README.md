@@ -3,10 +3,26 @@ Names: Joanna Kwok, Mia Lastres
 - Data: Gapminder
 - Subject Matter: comparing global trends of different countries, their signifigance, and correlations
 ___
-- Population =  Total population counts the number of inhabitants in the territory 
-- GDP per capita = Gross domestic product per person adjusted for differences in purchasing power (in international dollars, fixed 2021 prices, PPP based on 2021 ICP)
-- Life Expectancy = The number of years a newbord infant would live if the current mortality rates at different ages were to stay the same throughout 
-- CO2 Emission per Capita = Carbondioxide per Capita (Consumption based) from GM Long Series in Tannes of CO2 per capita 
-- Child Deaths  = The number of child deaths before age 5
-- Lung c. Deaths, Women = Total number of female deaths due to lung cancer during the certain year
-- Lung c. Deaths, Men = Total number of male deaths due to lung cancer during the certain year
+Variables and Definitions
+
+- Population
+Total population: counts the number of inhabitants in a country or territory.
+
+- GDP per Capita
+Gross Domestic Product per person, adjusted for differences in purchasing power (PPP) using international dollars, fixed at 2021 prices.
+Based on the 2021 International Comparison Program (ICP).
+
+- Life Expectancy
+The average number of years a newborn infant would live if current mortality rates at all ages remain constant.
+
+- CO₂ Emission per Capita
+Carbon dioxide emissions per person (consumption-based), measured in tonnes per capita.
+
+- Data from Gapminder Long Series.
+Child Deaths
+
+- Number of deaths of children before age 5.
+Lung Cancer Deaths, Women
+
+- Total number of female deaths due to lung cancer in a given year.
+Lung Cancer Deaths, Men
