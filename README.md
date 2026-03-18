@@ -1,7 +1,7 @@
 # BIS15L_W2026_Group9
 Names: Joanna Kwok, Mia Lastres
 - Data: Gapminder
-- Subject Matter: comparing global trends of different countries, their signifigance, and correlations
+- Subject Matter: comparing global trends of different countries, their significance, and correlations
 ___
 Variables and Definitions
 

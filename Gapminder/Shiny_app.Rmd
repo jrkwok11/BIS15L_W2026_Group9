@@ -9,8 +9,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-install.packages("bsicons")
-install.packages("shinyBS")
+#install.packages("bsicons")
+#install.packages("shinyBS")
 ```
 
 
